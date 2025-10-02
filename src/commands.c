@@ -30,6 +30,7 @@ void execute_commands(int argc, char **argv)
             if (argc > i + 2)
             {
                 import_save(atoi(argv[i + 1]), argv[i + 2]);
+                printf("argv[i + 1] = %s | argv[i + 2] = %s\n", argv[i + 1], argv[i + 2]);
                 i += 2;
             }
             else

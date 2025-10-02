@@ -12,12 +12,13 @@ int export_all_saves(char *ls)
 {
     char save[64];
     arfillzeros(save, 64);
-    strcat(save, "game0_");
+    size_t len = strlen(ls);
     strcat(save, ls);
+    strcat(save, "_game0");
 
     for (int i = 0; i < 10; i++)
     {
-        save[4] = '0' + i;
+        save[len + 1 + 4] = '0' + i;
         export_save(i, save);
         add_save_to_list(save, ls);
     }
