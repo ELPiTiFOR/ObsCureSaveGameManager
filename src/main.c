@@ -6,6 +6,7 @@
 
 int main(int argc, char **argv)
 {
+    setup_paths();
     execute_commands(argc, argv);
     return 0;
 }

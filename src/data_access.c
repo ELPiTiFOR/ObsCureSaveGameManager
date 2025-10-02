@@ -9,6 +9,7 @@
 
 int export_save(int n, char *name)
 {
+    printf("Name: %s\n", name);
     if (n < 0 || n > 9)
     {
         return 1;

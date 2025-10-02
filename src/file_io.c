@@ -201,6 +201,7 @@ char *str_from_file(char *src, size_t *total_written)
     return res;
 }
 
+/*
 // we assume argv ends with a NULL pointer
 void free_argv(char **argv)
 {
@@ -213,6 +214,7 @@ void free_argv(char **argv)
 
     free(argv);
 }
+*/
 
 char **str_to_argv(char *str, int *argc)
 {
@@ -265,4 +267,29 @@ char **str_to_argv(char *str, int *argc)
 
     *argc = i;
     return res;
+}
+
+int file_from_string(char *dst, char *content, size_t len)
+{
+    FILE *file = fopen(dst, "wb");
+    if (!file)
+    {
+        /*
+        char buf_log[512];
+        sprintf(buf_log, "Couldn't fopen() <%s>\n", dst);
+        log(ERROR, buf_log);
+        */
+        return 1;
+    }
+
+    size_t written = 0;
+
+    size_t w;
+    while ((w = fwrite(content + written, 1, len - written, file)))
+    {
+        written += w;
+    }
+
+    fclose(file);
+    return 0;
 }
