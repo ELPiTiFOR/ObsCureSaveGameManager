@@ -10,4 +10,6 @@ unsigned int crc_from_file(char *path, size_t skip);
 int correct_checksum_backup(char *name);
 int correct_checksum_save(int index);
 
+void print_save_info(char *path);
+
 #endif // BUSINESS_H

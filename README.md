@@ -14,8 +14,7 @@ In the following list, "[n]" means that the field is n bytes long
 - [4] The index of the savegame, that is "N" in "gameN.sav"
 - [1] Room
 - [1] ???
-- [2] Play time
-- [1] 0x00
+- [3] Play time
 - [1] Number of times the player saved
 - [2] ???
 - [1] The difficulty and mode. Each one of the 4 least significant bits

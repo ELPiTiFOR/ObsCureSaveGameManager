@@ -1,12 +1,14 @@
 #include "business.h"
 
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 
 #include "data_access.h"
 #include "file_io.h"
 #include "my_crc.h"
 #include "path.h"
+#include "save_data.h"
 #include "utils.h"
 
 int export_all_saves(char *ls)
@@ -120,4 +122,13 @@ int correct_checksum_save(int index)
     int res = correct_checksum(path_saves);
     remove_step_from_path(path_saves);
     return res;
+}
+
+void print_save_info(char *path)
+{
+    save_data *save = parse_save(path);
+    char *str = save_data_to_string(save);
+    printf("%s\n", str);
+    free(str);
+    free(save);
 }

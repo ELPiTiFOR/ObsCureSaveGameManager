@@ -121,5 +121,18 @@ void execute_commands(int argc, char **argv)
                 return;
             }
         }
+        else if (strcmp(argv[i], "-p") == 0)
+        {
+            if (argc > i + 1)
+            {
+                print_save_info(argv[i + 1]);
+                i += 1;
+            }
+            else
+            {
+                printf("ERROR: You must provide a path of a savegame when trying to print its info\n");
+                return;
+            }
+        }
     }
 }
