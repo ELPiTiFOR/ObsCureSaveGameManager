@@ -5,6 +5,7 @@
 
 #include "data_access.h"
 #include "file_io.h"
+#include "my_crc.h"
 #include "path.h"
 #include "utils.h"
 
@@ -62,4 +63,61 @@ int import_list(char *ls)
     free_argv(saves);
     fclose(list_file);
     return 0;
+}
+
+unsigned int crc_from_file(char *path, size_t skip)
+{
+    size_t written = 0;
+    unsigned char *content = str_from_file(path, &written);
+    if (!content)
+    {
+        fprintf(stderr, "ERROR: Couldn't retrieve content from file %s\n", path);
+        return 1;
+    }
+
+    //printf("CRC = %x | written = %zu\n", crc);
+    return crc32(content + skip, written - skip);
+}
+
+static int correct_checksum(char *path)
+{
+    unsigned int crc = crc_from_file(path, 4);
+    if (overwrite_crc(path, crc))
+    {
+        fprintf(stderr, "ERROR: Couldn't overwrite crc in file %s\n", path);
+        return 1;
+    }
+
+    return 0;
+}
+
+// name doesn't end in ".sav"
+int correct_checksum_backup(char *name)
+{
+    char filename[512];
+    arfillzeros(filename, 512);
+    strcpy(filename, name);
+    strcat(filename, ".sav");
+
+    add_step_to_path(path_backups, filename);
+    int res = correct_checksum(path_backups);
+    remove_step_from_path(path_backups);
+    return res;
+}
+
+// index belongs to 0-9
+int correct_checksum_save(int index)
+{
+    char filename[512];
+    char num[] = {'0', 0};
+    num[0] += index;
+    arfillzeros(filename, 512);
+    strcpy(filename, "game");
+    strcat(filename, num);
+    strcat(filename, ".sav");
+
+    add_step_to_path(path_saves, filename);
+    int res = correct_checksum(path_saves);
+    remove_step_from_path(path_saves);
+    return res;
 }

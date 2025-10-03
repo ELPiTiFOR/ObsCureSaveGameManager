@@ -81,5 +81,45 @@ void execute_commands(int argc, char **argv)
                 return;
             }
         }
+        else if (strcmp(argv[i], "-C") == 0)
+        {
+            if (argc > i + 1)
+            {
+                correct_checksum_backup(argv[i + 1]);
+                i += 1;
+            }
+            else
+            {
+                printf("ERROR: You must provide a name of savegame when trying to correct its CRC\n");
+                return;
+            }
+        }
+        else if (strcmp(argv[i], "-c") == 0)
+        {
+            if (argc > i + 1)
+            {
+                correct_checksum_save(atoi(argv[i + 1]));
+                i += 1;
+            }
+            else
+            {
+                printf("ERROR: You must provide an index of savegame when trying to correct its CRC\n");
+                return;
+            }
+        }
+        else if (strcmp(argv[i], "--show-crc32") == 0)
+        {
+            if (argc > i + 2)
+            {
+                unsigned int crc = crc_from_file(argv[i + 1], atoi(argv[i + 2]));
+                printf("CRC = %x\n", crc);
+                i += 2;
+            }
+            else
+            {
+                printf("ERROR: You must provide a path of a savegame and a skip number when trying to correct its CRC\n");
+                return;
+            }
+        }
     }
 }

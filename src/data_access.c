@@ -9,7 +9,7 @@
 
 int export_save(int n, char *name)
 {
-    printf("Name: %s\n", name);
+    //printf("Name: %s\n", name);
     if (n < 0 || n > 9)
     {
         return 1;
@@ -86,4 +86,27 @@ int add_save_to_list(char *save, char *ls)
 
     remove_step_from_path(path_backups);
     fclose(list_file);
+}
+
+int overwrite_crc(char *path, unsigned int crc)
+{
+    FILE *file = fopen(path, "rb+");
+    if (!file)
+    {
+        return 1;
+    }
+
+    unsigned char towrite[4] = {0};
+    void *towrite_v = towrite;
+    unsigned int *towrite_u = towrite_v;
+
+    towrite_u[0] = crc;
+
+    //printf("towrite: %x %x %x %x\n", towrite[0], towrite[1], towrite[2], towrite[3]);
+
+    //fseek(file, 0, SEEK_SET);
+    fwrite(towrite, 1, 4, file);
+
+    fclose(file);
+    return 0;
 }
