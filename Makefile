@@ -7,7 +7,8 @@ CPPFLAGS = -Isrc \
 	-Isrc/data_structures \
 	-Isrc/gui \
 	-Isrc/my_crc \
-	-Isrc/save_data
+	-Isrc/save_data \
+	-Isrc/rooms_names/
 CFLAGS_cli = -std=c99 #-mwindows
 CFLAGS_gui = -std=c99 -mwindows
 LDFLAGS = -lgdi32 -lole32 -luuid # -lcomdlg32 -lshell32 
@@ -23,7 +24,8 @@ SRC = \
 	src/my_string/my_string.c \
 	src/data_structures/pointers.c \
 	src/my_crc/my_crc.c \
-	src/save_data/save_data.c
+	src/save_data/save_data.c \
+	src/rooms_names/rooms_names.c
 OBJ = ${SRC:.c=.o}
 
 SRC_cli = $(SRC) \

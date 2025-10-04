@@ -6,6 +6,7 @@
 
 #include "file_io.h"
 #include "my_string.h"
+#include "rooms_names.h"
 #include "utils.h"
 
 unsigned int read_crc(char *content, size_t len)
@@ -62,19 +63,16 @@ unsigned char read_diff_mode(char *content, size_t len)
     return content[DIFF_MODE_OFFSET];
 }
 
-// the time is weird, because its length is 3 bytes. We're going to
-// take the next byte too to make things easier, and we'll put to 0 the 8 first
-// bytes
 unsigned int read_time(char *content, size_t len)
 {
-    if (len < TIME_OFFSET + TIME_LEN + 1)
+    if (len < TIME_OFFSET + TIME_LEN)
     {
         return 0;
     }
 
     void *content_v = content + TIME_OFFSET;
     unsigned int *content_i = content_v;
-    return content_i[0] & 0x00ffffff;
+    return content_i[0];
 }
 
 // return value must be freed
@@ -82,7 +80,32 @@ char *save_data_to_string(save_data *save)
 {
     char msg[512];
     arfillzeros(msg, 512);
-    sprintf(msg, "%02X / %d / %06X / ", save->room, save->nb_saves, save->time);
+
+    int hour = 0;
+    int minute = 0;
+    int seconds = 0;
+    int total_milli = save->time;
+    int total_seconds = total_milli / 1000;
+
+    int t = total_seconds;
+
+    hour = t / 3600;
+    t -= hour * 3600;
+    minute = t / 60;
+    seconds = t - minute * 60;
+
+    char *name = room_name_from_hex_id(save->room);
+
+    if (name)
+    {
+        sprintf(msg, "%s / %d / %02d:%02d:%02d / ", name, save->nb_saves, hour, minute, seconds);
+
+        free(name);
+    }
+    else
+    {
+        sprintf(msg, "%02X / %d / %02d:%02d:%02d / ", save->room, save->nb_saves, hour, minute, seconds);
+    }
 
     unsigned char diff = save->diff_mode;
     if (diff & EASY)

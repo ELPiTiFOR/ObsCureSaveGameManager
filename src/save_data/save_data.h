@@ -13,8 +13,8 @@
 #define NB_SAVES_LEN 1
 #define DIFF_MODE_OFFSET 17
 #define DIFF_MODE_LEN 1
-#define TIME_OFFSET 11
-#define TIME_LEN 3
+#define TIME_OFFSET 10
+#define TIME_LEN 4
 
 #define EASY 1
 #define NORMAL 2
