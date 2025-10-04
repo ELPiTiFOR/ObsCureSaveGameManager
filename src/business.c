@@ -124,11 +124,18 @@ int correct_checksum_save(int index)
     return res;
 }
 
-void print_save_info(char *path)
+char *get_save_info(char *path)
 {
     save_data *save = parse_save(path);
     char *str = save_data_to_string(save);
+    free(save);
+
+    return str;
+}
+
+void print_save_info(char *path)
+{
+    char *str = get_save_info(path);
     printf("%s\n", str);
     free(str);
-    free(save);
 }

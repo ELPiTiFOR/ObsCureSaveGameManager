@@ -63,3 +63,22 @@ char *duplicate_string_until(char *str, int c, size_t *index)
     *mark = c;
     return key;
 }
+
+int remove_last(char *str, char *to_remove)
+{
+    size_t len = strlen(str);
+    size_t len2 = strlen(to_remove);
+
+    size_t i = len - len2;
+
+    if (strcmp(str + i, to_remove) != 0)
+    {
+        return 1;
+    }
+
+    while (i < len)
+    {
+        str[i] = 0;
+        i++;
+    }
+}

@@ -122,7 +122,7 @@ char *save_data_to_string(save_data *save)
     }
     if (diff & SPECIAL_MODE)
     {
-        strcat(msg, " / *SPECIAL MODE*");
+        strcat(msg, " / SPECIAL");
     }
 
     return duplicate_string(msg);

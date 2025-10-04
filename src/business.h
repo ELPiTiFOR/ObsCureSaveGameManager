@@ -11,5 +11,6 @@ int correct_checksum_backup(char *name);
 int correct_checksum_save(int index);
 
 void print_save_info(char *path);
+char *get_save_info(char *path);
 
 #endif // BUSINESS_H

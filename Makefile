@@ -25,7 +25,8 @@ SRC = \
 	src/data_structures/pointers.c \
 	src/my_crc/my_crc.c \
 	src/save_data/save_data.c \
-	src/rooms_names/rooms_names.c
+	src/rooms_names/rooms_names.c \
+	src/gui/save_game_list.c
 OBJ = ${SRC:.c=.o}
 
 SRC_cli = $(SRC) \
