@@ -139,3 +139,11 @@ void print_save_info(char *path)
     printf("%s\n", str);
     free(str);
 }
+
+void print_save_data_path(char *path)
+{
+    save_data *save = parse_save(path);
+    char *str = save_data_to_string(save);
+    print_save_data(save, str);
+    free(str);
+}

@@ -16,6 +16,12 @@
 #define TIME_OFFSET 10
 #define TIME_LEN 4
 
+#define ITEM_INVENTORY_OFFSET 25
+#define GUN_AMMO_LEN 9
+
+#define HANDGUN_AMMO_KEY 0x07
+#define SHOTGUN_AMMO_KEY 0x06
+
 #define EASY 1
 #define NORMAL 2
 #define HARD 4
@@ -29,6 +35,8 @@ typedef struct
     unsigned char nb_saves;
     unsigned char diff_mode;
     unsigned int time;
+    unsigned int handgun_ammo;
+    unsigned int shotgun_ammo;
 } save_data;
 
 unsigned int read_crc(char *content, size_t len);
@@ -37,8 +45,11 @@ unsigned char read_room(char *content, size_t len);
 unsigned char read_nb_saves(char *content, size_t len);
 unsigned char read_diff_mode(char *content, size_t len);
 unsigned int read_time(char *content, size_t len);
+unsigned int read_gun_ammo(char *content, size_t len, char wanted,
+    char not_wanted);
 
-char *save_data_to_string(save_data *save);
 save_data *parse_save(char *path);
+char *save_data_to_string(save_data *save);
+void print_save_data(save_data *save, char *name);
 
 #endif /* !SAVE_DATA_H */

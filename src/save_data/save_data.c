@@ -75,6 +75,58 @@ unsigned int read_time(char *content, size_t len)
     return content_i[0];
 }
 
+unsigned int read_gun_ammo(char *content, size_t len, char wanted,
+    char not_wanted)
+{
+    if (len < ITEM_INVENTORY_OFFSET + GUN_AMMO_LEN)
+    {
+        return 0;
+    }
+
+    // checking if there is any handgun ammo info at all
+    char *gun_ammo = content + ITEM_INVENTORY_OFFSET;
+    if (gun_ammo[0] == wanted)
+    {
+        void *gun_ammo_v = gun_ammo + 1;
+        unsigned int *gun_ammo_i = gun_ammo_v;
+
+        // we take the 2nd element because the 1st one is in MSB
+        return gun_ammo_i[1];
+    }
+    else if (gun_ammo[0] == not_wanted)
+    {
+        return read_gun_ammo(content + GUN_AMMO_LEN, len, wanted,
+            not_wanted);
+    }
+    
+    return 0;
+}
+
+save_data *parse_save(char *path)
+{
+    size_t r = 0;
+    char *content = str_from_file(path, &r);
+    save_data *res = calloc(1, sizeof(save_data));
+    if (!res)
+    {
+        return NULL;
+    }
+
+    res->crc = read_crc(content, r);
+    res->index = read_index(content, r);
+    res->room = read_room(content, r);
+    res->nb_saves = read_nb_saves(content, r);
+    res->diff_mode = read_diff_mode(content, r);
+    res->time = read_time(content, r);
+    res->handgun_ammo = read_gun_ammo(content, r, HANDGUN_AMMO_KEY,
+        SHOTGUN_AMMO_KEY);
+    res->shotgun_ammo = read_gun_ammo(content, r, SHOTGUN_AMMO_KEY,
+        HANDGUN_AMMO_KEY);
+
+    free(content);
+    return res;
+}
+
 // return value must be freed
 char *save_data_to_string(save_data *save)
 {
@@ -128,23 +180,16 @@ char *save_data_to_string(save_data *save)
     return duplicate_string(msg);
 }
 
-save_data *parse_save(char *path)
+void print_save_data(save_data *save, char *name)
 {
-    size_t r = 0;
-    char *content = str_from_file(path, &r);
-    save_data *res = calloc(1, sizeof(save_data));
-    if (!res)
-    {
-        return NULL;
-    }
-
-    res->crc = read_crc(content, r);
-    res->index = read_index(content, r);
-    res->room = read_room(content, r);
-    res->nb_saves = read_nb_saves(content, r);
-    res->diff_mode = read_diff_mode(content, r);
-    res->time = read_time(content, r);
-
-    free(content);
-    return res;
+    printf("save_data *(%s) = {\n", name);
+    printf("    crc = %u\n", save->crc);
+    printf("    index = %d\n", save->index);
+    printf("    room = 0x%02X\n", save->room);
+    printf("    nb_saves = %hhd\n", save->nb_saves);
+    printf("    diff_mode = 0x%02X\n", save->diff_mode);
+    printf("    time = %d\n", save->time);
+    printf("    handgun_ammo = %d\n", save->handgun_ammo);
+    printf("    shotgun_ammo = %d\n", save->shotgun_ammo);
+    printf("}\n");
 }
