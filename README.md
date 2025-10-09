@@ -61,12 +61,11 @@ In the following list, "[n]" means that the field is n bytes long
 
 ## Progress? (starting at 0x85A)
 Here there is some info on the progress of the game (the drawings on the map!).
-    This pattern is repeated an arbitrary number of times : {\
-    - [2] Length of this section, without these 2 bytes (n) in LSB
-    - [n] Info, mostly info of a room, like the items that have been picked up
-        - [1] 1byte-ID of the room (just like at offset 0x09)
-        - [1] Info on the kinematics that have already been played or not?\
-    }
+    This pattern is repeated an arbitrary number of times :
+        - [2] Length of this section, without these 2 bytes (n) in LSB
+        - [n] Info, mostly info of a room, like the items that have been picked up
+            - [1] 1byte-ID of the room (just like at offset 0x09)
+            - [1] Info on the kinematics that have already been played or not?\
     - [1] 0x09 --> this represents the end of the Progress section
 
 # Authors
