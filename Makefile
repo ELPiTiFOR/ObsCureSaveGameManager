@@ -26,7 +26,8 @@ SRC = \
 	src/my_crc/my_crc.c \
 	src/save_data/save_data.c \
 	src/rooms_names/rooms_names.c \
-	src/gui/save_game_list.c
+	src/gui/save_game_list.c \
+	src/check.c
 OBJ = ${SRC:.c=.o}
 
 SRC_cli = $(SRC) \
@@ -51,4 +52,5 @@ ocsgm_gui: $(OBJ_gui) resources/resources.o
 	$(CC) $(CFLAGS_gui) -o $@ $^ $(LDFLAGS)
 
 clean:
-	$(RM) ocsgm_gui ocsgm resources/resources.o $(OBJ) $(OBJ_cli) $(OBJ_gui)
+	$(RM) ocsgm_gui ocsgm resources/resources.o $(OBJ) $(OBJ_cli) $(OBJ_gui) \
+	game.sav game.sav.bak

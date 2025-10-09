@@ -5,6 +5,7 @@
 #include <string.h>
 
 #include "business.h"
+#include "check.h"
 #include "data_access.h"
 
 void execute_commands(int argc, char **argv)
@@ -133,6 +134,23 @@ void execute_commands(int argc, char **argv)
                 printf("ERROR: You must provide a path of a savegame when trying to print its info\n");
                 return;
             }
+        }
+        else if (strcmp(argv[i], "-T") == 0)
+        {
+            if (argc > i + 1)
+            {
+                create_template_file_path(argv[i + 1]);
+                i += 1;
+            }
+            else
+            {
+                printf("ERROR: You must provide a path of a directory when trying to generate a template\n");
+                return;
+            }
+        }
+        else if (strcmp(argv[i], "-t") == 0)
+        {
+            create_template_file_game_n();
         }
     }
 }
