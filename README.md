@@ -1,10 +1,6 @@
 # Intro
 Work in progress
 
-# Before going on
-This source code doesn't include the CRC32 implementation (yet). Read the README
-in the folder `my_crc`.
-
 # Format `.sav`
 In the following list, "[n]" means that the field is n bytes long
 
