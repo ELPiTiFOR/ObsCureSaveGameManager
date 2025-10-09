@@ -8,7 +8,8 @@ CPPFLAGS = -Isrc \
 	-Isrc/gui \
 	-Isrc/my_crc \
 	-Isrc/save_data \
-	-Isrc/rooms_names/
+	-Isrc/rooms_names/ \
+	-Isrc/allitems_reader
 CFLAGS_cli = -std=c99 #-mwindows
 CFLAGS_gui = -std=c99 -mwindows
 LDFLAGS = -lgdi32 -lole32 -luuid # -lcomdlg32 -lshell32 
@@ -27,7 +28,8 @@ SRC = \
 	src/save_data/save_data.c \
 	src/rooms_names/rooms_names.c \
 	src/gui/save_game_list.c \
-	src/check.c
+	src/check.c \
+	src/allitems_reader/allitems_reader.c
 OBJ = ${SRC:.c=.o}
 
 SRC_cli = $(SRC) \
