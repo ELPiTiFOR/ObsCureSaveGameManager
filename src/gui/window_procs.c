@@ -139,6 +139,14 @@ LRESULT CALLBACK SettingsWindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM 
                 SetDlgItemText(hwnd, PATH_BACKUPS_EDIT_ID, ruta);
             }
         }
+        else if (LOWORD(wParam) == BROWSE_GAME_BUTTON_ID)
+        {
+            char ruta[MAX_PATH] = {0};
+            if (SelectFolder(hwnd, ruta, MAX_PATH))
+            {
+                SetDlgItemText(hwnd, PATH_GAME_EDIT_ID, ruta);
+            }
+        }
         else if (LOWORD(wParam) == APPLY_SETTINGS_BUTTON_ID)
         {
             char saves[512];
@@ -147,11 +155,16 @@ LRESULT CALLBACK SettingsWindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM 
             char backups[512];
             memset(backups, 0, 512);
             GetDlgItemText(hwnd, PATH_BACKUPS_EDIT_ID, backups, sizeof(backups));
+            char game[512];
+            memset(game, 0, 512);
+            GetDlgItemText(hwnd, PATH_GAME_EDIT_ID, game, sizeof(game));
 
             config_set("path_backups", backups);
             config_set("path_saves", saves);
+            config_set("path_game", game);
             set_path_backups(backups);
             set_path_saves(saves);
+            set_path_game(game);
             refresh_buttons();
         }
         else if (LOWORD(wParam) == WM_ERASEBKGND)

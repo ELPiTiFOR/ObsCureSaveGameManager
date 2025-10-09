@@ -92,7 +92,7 @@ void setup_config(void)
     if (!config_str)
     {
         // let's create the file
-        file_from_string("OCSGM.config", "path_saves=C:\\\npath_backups=C:\\\n", 32);
+        file_from_string("OCSGM.config", "path_saves=C:\\\npath_backups=C:\\\npath_game=C:\\\n", 46);
         config_str = str_from_file("OCSGM.config", &len);
     }
     config = config_from_str(config_str);

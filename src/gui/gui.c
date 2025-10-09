@@ -46,7 +46,7 @@ void OpenSettingsWindow(HWND parentHwnd)
         "Settings | ObsCure Save Game Manager",
         0 | WS_OVERLAPPED | WS_SYSMENU | WS_MINIMIZEBOX | WS_VISIBLE,
         CW_USEDEFAULT, CW_USEDEFAULT,
-        600, 300,
+        600, 370,
         parentHwnd,
         NULL,
         hInstance,
@@ -165,6 +165,7 @@ void create_settings_window_elements(HWND hwnd)
         WS_VISIBLE | WS_CHILD | BS_PUSHBUTTON,
         10, 10, 80, 30, hwnd, (HMENU)CLOSE_SETTINGS_BUTTON_ID, NULL, NULL);
 
+    /* PATH_SAVES */
     CreateWindow("BUTTON", "Browse...",
         WS_VISIBLE | WS_CHILD | BS_PUSHBUTTON,
         10, 70, 100, 30, hwnd, (HMENU)BROWSE_SAVES_BUTTON_ID, NULL /*hInstance*/, NULL);
@@ -178,6 +179,7 @@ void create_settings_window_elements(HWND hwnd)
         WS_VISIBLE | WS_CHILD | WS_BORDER | ES_AUTOHSCROLL,
         10, 110, 560, 25, hwnd, (HMENU)PATH_SAVES_EDIT_ID, NULL /*hInstance*/, NULL);
 
+    /* PATH_BACKUPS */
     CreateWindow("BUTTON", "Browse...",
         WS_VISIBLE | WS_CHILD | BS_PUSHBUTTON,
         10, 160, 100, 30, hwnd, (HMENU)BROWSE_BACKUPS_BUTTON_ID, NULL /*hInstance*/, NULL);
@@ -189,6 +191,20 @@ void create_settings_window_elements(HWND hwnd)
     CreateWindow("EDIT", get_path_backups(),
         WS_VISIBLE | WS_CHILD | WS_BORDER | ES_AUTOHSCROLL,
         10, 200, 560, 25, hwnd, (HMENU)PATH_BACKUPS_EDIT_ID, NULL /*hInstance*/, NULL);
+
+    /* PATH_GAME */
+    CreateWindow("BUTTON", "Browse...",
+        WS_VISIBLE | WS_CHILD | BS_PUSHBUTTON,
+        10, 250, 100, 30, hwnd, (HMENU)BROWSE_GAME_BUTTON_ID, NULL /*hInstance*/, NULL);
+    
+    CreateWindow("STATIC", "Path where your game is installed", 
+        WS_VISIBLE | WS_CHILD,
+        120, 260, 260, 20, hwnd, NULL, NULL, NULL);
+
+    CreateWindow("EDIT", get_path_game(),
+        WS_VISIBLE | WS_CHILD | WS_BORDER | ES_AUTOHSCROLL,
+        10, 290, 560, 25, hwnd, (HMENU)PATH_GAME_EDIT_ID, NULL /*hInstance*/, NULL);
+
 
 
     CreateWindow("BUTTON", "Apply",
