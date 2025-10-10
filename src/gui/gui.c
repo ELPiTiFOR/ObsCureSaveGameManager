@@ -270,6 +270,7 @@ void create_backups_save_game_list(HWND hwnd, HINSTANCE hInstance)
 
         save_game_list *next_sgl = make_sgl(NULL, duplicate_string(filename_noext), i + BACKUPS_BUTTONS_IDS_START, buttonHwnd, -1,
             i + BACKUPS_REFRESH_BUTTONS_IDS_START, refreshButtonHwnd);
+
         p->next = next_sgl;
         p = next_sgl;
 
@@ -530,7 +531,7 @@ void check_saves_refresh_buttons(WPARAM wParam)
 
 void check_backups_refresh_buttons(WPARAM wParam)
 {
-    save_game_list *p = saves_list->next;
+    save_game_list *p = backups_list->next;
     if (!p)
     {
         fprintf(stderr, "ERROR: saves_list->next == NULL\n");
