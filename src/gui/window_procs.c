@@ -276,10 +276,16 @@ LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
             selected_backup = NULL;
             SetWindowText(selectedBackupTextHwnd, "");
         }
+        else if (LOWORD(wParam) == REFRESH_BUTTON_ID)
+        {
+            refresh_buttons();
+        }
         else
         {
             check_backups_buttons(wParam);
             check_saves_buttons(wParam, hwnd);
+            check_backups_refresh_buttons(wParam);
+            check_saves_refresh_buttons(wParam);
         }
         break;
     case WM_PAINT:

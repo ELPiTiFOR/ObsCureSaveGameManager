@@ -24,6 +24,7 @@
 #define IMPORT_ALL_NAME_INPUT_ID 12
 #define APPLY_SETTINGS_BUTTON_ID 13
 #define CLOSE_SETTINGS_BUTTON_ID 14
+#define REFRESH_BUTTON_ID 15
 #define BROWSE_SAVES_BUTTON_ID 101
 #define PATH_SAVES_EDIT_ID 102
 #define BROWSE_BACKUPS_BUTTON_ID 103
@@ -71,5 +72,9 @@ void check_backups_buttons(WPARAM wParam);
 void check_saves_buttons(WPARAM wParam, HWND hwnd);
 
 void refresh_buttons(void);
+
+// it says "refresh" but it's actually correcting the CRC32 checksum
+void check_backups_refresh_buttons(WPARAM wParam);
+void check_saves_refresh_buttons(WPARAM wParam);
 
 #endif /* GUI_H */

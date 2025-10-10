@@ -76,7 +76,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
         800,
         600,
         */
-        1100,
+        1115,
         600,
         NULL,
         NULL,

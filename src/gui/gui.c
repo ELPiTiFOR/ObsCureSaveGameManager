@@ -10,8 +10,11 @@
 #define BACKUPS_BUTTONS_IDS_START 1000
 #define SAVES_BUTTONS_IDS_START 2000
 
-#define SLOT_WIDTH 570
-#define SAVE_SLOT_WIDTH 450
+#define BACKUPS_REFRESH_BUTTONS_IDS_START 1100
+#define SAVES_REFRESH_BUTTONS_IDS_START 2100
+
+#define SLOT_WIDTH 560
+#define SAVE_SLOT_WIDTH 440
 #define SLOT_HEIGHT 25
 #define SLOTS_GAP_TOP 120
 #define SAVE_SLOTS_GAP_LEFT 500
@@ -260,9 +263,13 @@ void create_backups_save_game_list(HWND hwnd, HINSTANCE hInstance)
         HWND buttonHwnd = CreateWindow("BUTTON", whole_info, WS_TABSTOP | WS_VISIBLE | WS_CHILD | BS_DEFPUSHBUTTON,
                     20, SLOTS_GAP_TOP + j * 35, SLOT_WIDTH, SLOT_HEIGHT, hwnd, (HMENU) (i + BACKUPS_BUTTONS_IDS_START), hInstance, NULL);
 
+        HWND refreshButtonHwnd = CreateWindow("BUTTON", "C", WS_TABSTOP | WS_VISIBLE | WS_CHILD | BS_DEFPUSHBUTTON,
+                    SLOT_WIDTH + 25, SLOTS_GAP_TOP + j * 35, SLOT_HEIGHT, SLOT_HEIGHT, hwnd, (HMENU) (i + BACKUPS_REFRESH_BUTTONS_IDS_START), hInstance, NULL);
+
         remove_step_from_path(path_backups);
 
-        save_game_list *next_sgl = make_sgl(NULL, duplicate_string(filename_noext), i + BACKUPS_BUTTONS_IDS_START, buttonHwnd, -1);
+        save_game_list *next_sgl = make_sgl(NULL, duplicate_string(filename_noext), i + BACKUPS_BUTTONS_IDS_START, buttonHwnd, -1,
+            i + BACKUPS_REFRESH_BUTTONS_IDS_START, refreshButtonHwnd);
         p->next = next_sgl;
         p = next_sgl;
 
@@ -298,9 +305,17 @@ void create_saves_save_game_list(HWND hwnd, HINSTANCE hInstance)
     do
     {
         add_step_to_path(path_saves, FindFileData.cFileName);
+        char info_and_index[512];
+        arfillzeros(info_and_index, 512);
+        sprintf(info_and_index, "%02d. ", j + 1);
+
         char *save_info = get_save_info(path_saves);
-        HWND buttonHwnd = CreateWindow("BUTTON", save_info, WS_TABSTOP | WS_VISIBLE | WS_CHILD | BS_DEFPUSHBUTTON,
-                    SLOT_WIDTH + 50, SLOTS_GAP_TOP + j * 35, SAVE_SLOT_WIDTH, SLOT_HEIGHT, hwnd, (HMENU) (j + SAVES_BUTTONS_IDS_START), hInstance, NULL);
+        strcat(info_and_index, save_info);
+        HWND buttonHwnd = CreateWindow("BUTTON", info_and_index, WS_TABSTOP | WS_VISIBLE | WS_CHILD | BS_DEFPUSHBUTTON,
+                    SLOT_WIDTH + 60, SLOTS_GAP_TOP + j * 35, SAVE_SLOT_WIDTH, SLOT_HEIGHT, hwnd, (HMENU) (j + SAVES_BUTTONS_IDS_START), hInstance, NULL);
+
+        HWND refreshButtonHwnd = CreateWindow("BUTTON", "C", WS_TABSTOP | WS_VISIBLE | WS_CHILD | BS_DEFPUSHBUTTON,
+                    SLOT_WIDTH + SAVE_SLOT_WIDTH + 65, SLOTS_GAP_TOP + j * 35, SLOT_HEIGHT, SLOT_HEIGHT, hwnd, (HMENU) (j + SAVES_REFRESH_BUTTONS_IDS_START), hInstance, NULL);
 
         remove_step_from_path(path_saves);
 
@@ -309,7 +324,8 @@ void create_saves_save_game_list(HWND hwnd, HINSTANCE hInstance)
         strcpy(filename_noext, FindFileData.cFileName);
         remove_last(filename_noext, ".sav");
 
-        save_game_list *next_sgl = make_sgl(NULL, duplicate_string(filename_noext), j + SAVES_BUTTONS_IDS_START, buttonHwnd, j);
+        save_game_list *next_sgl = make_sgl(NULL, duplicate_string(filename_noext), j + SAVES_BUTTONS_IDS_START, buttonHwnd, j,
+            j + SAVES_REFRESH_BUTTONS_IDS_START, refreshButtonHwnd);
         p->next = next_sgl;
         p = next_sgl;
 
@@ -372,15 +388,18 @@ void create_main_window_elements(HWND hwnd, HINSTANCE hInstance)
                  80, 20, 40, 40, hwnd, (HMENU)POST_PAGE_BUTTON_ID, hInstance, NULL);
 
     CreateWindow("BUTTON", "Settings", WS_TABSTOP | WS_VISIBLE | WS_CHILD | BS_DEFPUSHBUTTON,
-                 1100 - 60 - 30 /*720*/, 20, 60, 60, hwnd, (HMENU)SETTINGS_BUTTON_ID, hInstance, NULL);
+                 1115 - 60 - 30 /*720*/, 20, 60, 60, hwnd, (HMENU)SETTINGS_BUTTON_ID, hInstance, NULL);
+
+    CreateWindow("BUTTON", "Refresh", WS_TABSTOP | WS_VISIBLE | WS_CHILD | BS_DEFPUSHBUTTON,
+                 1115 - 60 - 30 /*720*/, 90, 60, 20, hwnd, (HMENU)REFRESH_BUTTON_ID, hInstance, NULL);
 
 
     CreateWindow("BUTTON", "Export All", WS_TABSTOP | WS_VISIBLE | WS_CHILD | BS_DEFPUSHBUTTON,
-                 SLOT_WIDTH + 50 /*420*/, 490, 100, 20, hwnd, (HMENU)EXPORT_ALL_BUTTON_ID, hInstance, NULL);
+                 SLOT_WIDTH + 60 /*420*/, 490, 100, 20, hwnd, (HMENU)EXPORT_ALL_BUTTON_ID, hInstance, NULL);
 
     // Text input - Name - Export All
     CreateWindow("EDIT", "", WS_VISIBLE | WS_CHILD | WS_BORDER | ES_AUTOHSCROLL,
-                 SLOT_WIDTH + 50 + 120 /*540*/, 490, 200, 20, hwnd, (HMENU)EXPORT_ALL_NAME_INPUT_ID, hInstance, NULL);
+                 SLOT_WIDTH + 60 + 120 /*540*/, 490, 200, 20, hwnd, (HMENU)EXPORT_ALL_NAME_INPUT_ID, hInstance, NULL);
 
     CreateWindow("BUTTON", "Import All", WS_TABSTOP | WS_VISIBLE | WS_CHILD | BS_DEFPUSHBUTTON,
                  20, 490, 100, 20, hwnd, (HMENU)IMPORT_ALL_BUTTON_ID, hInstance, NULL);
@@ -484,6 +503,44 @@ void check_saves_buttons(WPARAM wParam, HWND hwnd)
                 //OpenSettingsWindow(thisHwnd);
             }
             return;
+        }
+
+        p = p->next;
+    }
+}
+
+void check_saves_refresh_buttons(WPARAM wParam)
+{
+    save_game_list *p = saves_list->next;
+    if (!p)
+    {
+        fprintf(stderr, "ERROR: saves_list->next == NULL\n");
+    }
+
+    while (p)
+    {
+        if (LOWORD(wParam) == p->refresh_button_id)
+        {
+            correct_checksum_save(p->index);
+        }
+
+        p = p->next;
+    }
+}
+
+void check_backups_refresh_buttons(WPARAM wParam)
+{
+    save_game_list *p = saves_list->next;
+    if (!p)
+    {
+        fprintf(stderr, "ERROR: saves_list->next == NULL\n");
+    }
+
+    while (p)
+    {
+        if (LOWORD(wParam) == p->refresh_button_id)
+        {
+            correct_checksum_backup(p->filename);
         }
 
         p = p->next;

@@ -10,10 +10,12 @@ typedef struct save_game_list
     int button_id;
     HWND hwnd;
     int index;
+    int refresh_button_id;
+    HWND refresh_hwnd;
 } save_game_list;
 
 save_game_list *make_sgl(save_game_list *next, char *filename, int button_id,
-    HWND hwnd, int index);
+    HWND hwnd, int index, int refresh_button_id, HWND refresh_hwnd);
 save_game_list *make_sgl_sentinel(void);
 void free_destroy_sgl(save_game_list *sgl);
 
