@@ -85,8 +85,9 @@ In the following list, "[n]" means that the field is n bytes long
     represent something. Starting from the rightmost bit, the 0th bit represents
     the easy difficulty, the 1st bit represents the normal difficulty, the 2nd
     bit represents hard, and the 3rd represents Special Mode.
-- [7] 0x64 00 44 08 31 02 3E
+- [6] 0x64 00 44 08 31 02
 
+- [1] Number of item slots (groups of 9 bytes) (usually 0x3E)
 - [1] (opt) 0x07 (--> handgun ammo ahead?)
 - [4] Handgun ammo in MSB
 - [4] Handgun ammo in LSB
