@@ -1,5 +1,5 @@
-#ifndef GUI_H
-#define GUI_H
+#ifndef MAIN_WINDOW_H
+#define MAIN_WINDOW_H
 
 #include <objbase.h>
 #include <shlobj.h>
@@ -40,8 +40,9 @@
 #define DESELECT_BACKUP_BUTTON_ID 402
 
 extern const char MAIN_CLASS_NAME[];
-extern const char SETTINGS_CLASS_NAME[];
-extern const char EXPORT_SINGLE_CLASS_NAME[];
+
+extern HWND thisHwnd;
+extern HINSTANCE thisHInstance;
 
 extern int current_list_offset;
 extern int entries_per_page;
@@ -52,18 +53,10 @@ extern save_game_list *saves_list;
 extern save_game_list *selected_backup;
 extern save_game_list *selected_save;
 
-extern HWND thisHwnd;
-extern HINSTANCE thisHInstance;
 extern HWND selectedBackupTextHwnd;
 
 extern char exported_name[512];
 
-void OpenExportSingleWindow(HWND parentHwnd);
-void OpenSettingsWindow(HWND parentHwnd);
-int SelectFolder(HWND hwnd, char *path, int size);
-
-void create_export_single_window_elements(HWND hwnd);
-void create_settings_window_elements(HWND hwnd);
 void create_main_window_elements(HWND hwnd, HINSTANCE hInstance);
 
 void scroll_backups(HWND hwnd, HINSTANCE hInstance, int up);
@@ -77,4 +70,6 @@ void refresh_buttons(void);
 void check_backups_refresh_buttons(WPARAM wParam);
 void check_saves_refresh_buttons(WPARAM wParam);
 
-#endif /* GUI_H */
+LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
+
+#endif /* !MAIN_WINDOW_H */

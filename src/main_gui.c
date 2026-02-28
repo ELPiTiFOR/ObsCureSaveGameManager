@@ -9,10 +9,11 @@
 #include "business.h"
 #include "config.h"
 #include "data_access.h"
-#include "gui.h"
 #include "path.h"
 #include "utils.h"
-#include "window_procs.h"
+#include "main_window.h"
+#include "settings_window.h"
+#include "export_single_window.h"
 
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow)
 {

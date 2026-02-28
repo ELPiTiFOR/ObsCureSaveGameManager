@@ -38,8 +38,10 @@ OBJ_cli = ${SRC_cli:.c=.o}
 
 SRC_gui = $(SRC) \
 	src/main_gui.c \
-	src/gui/gui.c \
-	src/gui/window_procs.c
+	src/gui/main_window.c \
+	src/gui/settings_window.c \
+	src/gui/export_single_window.c \
+
 OBJ_gui = ${SRC_gui:.c=.o}
 
 all: ocsgm
