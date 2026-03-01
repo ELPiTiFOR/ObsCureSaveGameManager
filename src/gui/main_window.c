@@ -207,6 +207,7 @@ void create_main_window_elements(HWND hwnd, HINSTANCE hInstance)
 }
 
 // up = 1 if scrolling up, otherwise up = 0
+// TODO: are the arguments really needed? They are global variables
 void scroll_backups(HWND hwnd, HINSTANCE hInstance, int up)
 {
     //
