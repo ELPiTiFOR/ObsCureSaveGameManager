@@ -63,6 +63,11 @@ void create_backups_save_game_list(HWND hwnd, HINSTANCE hInstance)
 
     int i = 0;
     int j = 0;
+    /*
+    ** TODO: we search the files each time from the start, which makes the
+    ** program very slow when there's a lot of backups and we check the last
+    ** pages
+    */
     do
     {
         if (i < current_list_offset || i >= current_list_offset + entries_per_page)
@@ -207,6 +212,7 @@ void scroll_backups(HWND hwnd, HINSTANCE hInstance, int up)
     //
     free_destroy_sgl(backups_list);
 
+    // TODO: why making sentinel?
     save_game_list *p = make_sgl_sentinel();
     if (!p)
     {
@@ -235,6 +241,7 @@ void refresh_buttons(void)
     free_destroy_sgl(backups_list);
     free_destroy_sgl(saves_list);
 
+    // TODO: why making sentinels?
     backups_list = make_sgl_sentinel();
     saves_list = make_sgl_sentinel();
 

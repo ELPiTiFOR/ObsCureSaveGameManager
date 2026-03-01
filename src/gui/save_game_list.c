@@ -38,6 +38,7 @@ void free_destroy_sgl(save_game_list *sgl)
         //printf("Freeing %s\n", p->filename);
         free(p->filename);
         DestroyWindow(p->hwnd);
+        // TODO: should I destroy refres_hwnd?
         p = p->next;
     }
 }
