@@ -32,6 +32,7 @@ void OpenSettingsWindow(HWND parentHwnd)
     }
 }
 
+// TODO: move this function to some utils_gui.c file or something similar
 int SelectFolder(HWND hwnd, char *path, int size)
 {
     CoInitialize(NULL);
