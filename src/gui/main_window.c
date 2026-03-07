@@ -36,19 +36,53 @@ save_game_list *saves_list = NULL;
 save_game_list *selected_backup = NULL;
 save_game_list *selected_save = NULL;
 
+char **backup_filenames;
+size_t nb_backup_filenames;
+
 HWND selectedBackupTextHwnd;
 
 char exported_name[512];
 
-void create_backups_save_game_list(HWND hwnd, HINSTANCE hInstance)
+void gather_backup_filenames(void)
 {
-    // backups buttons
     WIN32_FIND_DATA FindFileData;
     add_step_to_path(path_backups, "*.sav");
     HANDLE hFind = FindFirstFile(path_backups, &FindFileData);
     remove_step_from_path(path_backups);
 
+    nb_backup_filenames = 0;
+
     if (hFind == INVALID_HANDLE_VALUE)
+    {
+        return;
+    }
+
+    do
+    {
+        nb_backup_filenames++;
+        backup_filenames = realloc(backup_filenames,
+            sizeof(char *) * nb_backup_filenames);
+        backup_filenames[nb_backup_filenames - 1] = duplicate_string(FindFileData.cFileName);
+    } while (FindNextFile(hFind, &FindFileData));
+
+    FindClose(hFind);
+}
+
+void free_backup_filenames(void)
+{
+    for (size_t i = 0; i < nb_backup_filenames; i++)
+    {
+        free(backup_filenames[i]);
+    }
+
+    free(backup_filenames);
+    backup_filenames = NULL;
+}
+
+void create_backups_save_game_list(HWND hwnd, HINSTANCE hInstance)
+{
+    // backups buttons
+    if (!backup_filenames)
     {
         return;
     }
@@ -63,11 +97,7 @@ void create_backups_save_game_list(HWND hwnd, HINSTANCE hInstance)
 
     int i = 0;
     int j = 0;
-    /*
-    ** TODO: we search the files each time from the start, which makes the
-    ** program very slow when there's a lot of backups and we check the last
-    ** pages
-    */
+    // TODO: don't check the whole array of strings backup_filenames?
     do
     {
         if (i < current_list_offset || i >= current_list_offset + entries_per_page)
@@ -78,10 +108,10 @@ void create_backups_save_game_list(HWND hwnd, HINSTANCE hInstance)
 
         char filename_noext[512];
         arfillzeros(filename_noext, 512);
-        strcpy(filename_noext, FindFileData.cFileName);
+        strcpy(filename_noext, backup_filenames[i]);
         remove_last(filename_noext, ".sav");
 
-        add_step_to_path(path_backups, FindFileData.cFileName);
+        add_step_to_path(path_backups, backup_filenames[i]);
         char *save_info = get_save_info(path_backups);
 
         char whole_info[1024];
@@ -106,9 +136,7 @@ void create_backups_save_game_list(HWND hwnd, HINSTANCE hInstance)
 
         i++;
         j++;
-    } while (FindNextFile(hFind, &FindFileData));
-
-    FindClose(hFind);
+    } while (i < nb_backup_filenames);
 }
 
 void create_saves_save_game_list(HWND hwnd, HINSTANCE hInstance)
@@ -231,7 +259,10 @@ void scroll_backups(HWND hwnd, HINSTANCE hInstance, int up)
     }
     else
     {
-        current_list_offset += entries_per_page;
+        if (current_list_offset + entries_per_page < nb_backup_filenames)
+        {
+            current_list_offset += entries_per_page;
+        }
     }
 
     create_backups_save_game_list(hwnd, hInstance);
@@ -239,6 +270,8 @@ void scroll_backups(HWND hwnd, HINSTANCE hInstance, int up)
 
 void refresh_buttons(void)
 {
+    free_backup_filenames();
+    gather_backup_filenames();
     free_destroy_sgl(backups_list);
     free_destroy_sgl(saves_list);
 
@@ -354,6 +387,9 @@ LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
     switch (uMsg)
     {
+    case WM_CREATE:
+        gather_backup_filenames();
+        break;
     case WM_COMMAND:
         if (LOWORD(wParam) == EXPORT_SINGLE_BUTTON_ID)
         {
@@ -468,6 +504,7 @@ LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
             return 0;
     case WM_DESTROY:
         free_config();
+        free_backup_filenames();
         PostQuitMessage(0);
         return 0;
     }
